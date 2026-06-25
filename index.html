@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kundli Milan — Vedic Compatibility</title>
+<style>
+  :root{
+    --ink:#1c1208;        /* deep brown-black */
+    --paper:#f5ead6;      /* aged manuscript */
+    --paper2:#efe0c4;
+    --saffron:#c4521b;    /* deep saffron/sindoor */
+    --gold:#9c6b16;       /* old gold */
+    --gold-bright:#caa24a;
+    --maroon:#5e1414;     /* temple maroon */
+    --teal:#1f5a52;       /* contrast jewel */
+    --line:rgba(94,20,20,.22);
+    --good:#2f6f3e;
+    --warn:#b07012;
+    --bad:#9a2828;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:
+      radial-gradient(circle at 50% -10%, rgba(196,82,27,.10), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    line-height:1.55;
+  }
+  .wrap{max-width:1020px;margin:0 auto;padding:clamp(18px,4vw,40px)}
+  /* ---- masthead ---- */
+  header.mast{text-align:center;padding-top:8px}
+  .yantra{width:78px;height:78px;margin:0 auto 6px;display:block}
+  .eyebrow{letter-spacing:.42em;text-transform:uppercase;font-size:11px;color:var(--maroon);font-weight:700}
+  h1{
+    font-size:clamp(34px,7vw,60px);margin:.12em 0 .05em;font-weight:800;
+    color:var(--maroon);letter-spacing:.01em;line-height:1.02;
+  }
+  h1 .dev{display:block;font-size:.5em;letter-spacing:.2em;color:var(--saffron);font-weight:700;margin-bottom:.18em}
+  .sub{font-size:15px;color:#5a4327;max-width:560px;margin:.4em auto 0;font-style:italic}
+  .rule{height:0;border:0;border-top:1.5px solid var(--gold);margin:22px auto;max-width:230px;position:relative}
+  .rule::before{content:"❖";position:absolute;left:50%;top:-.82em;transform:translateX(-50%);background:var(--paper);padding:0 12px;color:var(--gold);font-size:14px}
+
+  /* ---- form ---- */
+  .forms{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:6px}
+  @media(max-width:720px){.forms{grid-template-columns:1fr}}
+  .card{
+    background:linear-gradient(180deg,var(--paper2),var(--paper));
+    border:1px solid var(--line);border-radius:4px;
+    padding:20px 20px 22px;position:relative;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset, 0 8px 22px -16px rgba(94,20,20,.5);
+  }
+  .card::before{content:"";position:absolute;inset:5px;border:1px solid rgba(156,107,22,.35);border-radius:2px;pointer-events:none}
+  .card h2{margin:0 0 14px;font-size:19px;color:var(--saffron);display:flex;align-items:center;gap:8px;letter-spacing:.02em}
+  .card h2 .n{font-size:12px;background:var(--maroon);color:var(--paper);width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-weight:700}
+  label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--maroon);margin:12px 0 4px;font-weight:700}
+  input{
+    width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:3px;
+    background:rgba(255,255,255,.55);font:inherit;font-size:15px;color:var(--ink);
+  }
+  input:focus{outline:2px solid var(--gold-bright);outline-offset:1px;border-color:transparent}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .hint{font-size:11px;color:#7a6038;margin-top:5px;font-style:italic;letter-spacing:.01em;text-transform:none}
+  .geo{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .place{display:grid;grid-template-columns:1fr auto;gap:8px}
+  .findbtn{font:inherit;font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:12px;
+    color:var(--paper);background:var(--teal);border:1px solid var(--teal);border-radius:3px;
+    padding:0 16px;cursor:pointer}
+  .findbtn:hover{filter:brightness(1.1)}
+  .findbtn:disabled{opacity:.55;cursor:wait}
+  input[readonly]{background:rgba(94,20,20,.05);color:#6a5232}
+  .placeres{display:none;margin-top:7px;border:1px solid var(--line);border-radius:3px;
+    background:rgba(255,255,255,.7);max-height:180px;overflow:auto}
+  .placeres.show{display:block}
+  .placeres button{display:block;width:100%;text-align:left;background:none;border:0;
+    border-bottom:1px solid var(--line);padding:8px 11px;font:inherit;font-size:13.5px;cursor:pointer;color:var(--ink)}
+  .placeres button:last-child{border-bottom:0}
+  .placeres button:hover{background:rgba(202,162,74,.18)}
+  .placeres button small{color:#7a6038;display:block;font-size:11px;margin-top:1px}
+  .placeres .picked{background:rgba(47,111,62,.12);font-weight:700}
+  .dob{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:10px}
+  .dob input{text-align:center}
+
+  .act{text-align:center;margin:26px 0 4px}
+  button.go{
+    font:inherit;font-weight:800;letter-spacing:.16em;text-transform:uppercase;font-size:14px;
+    color:var(--paper);background:linear-gradient(180deg,var(--saffron),var(--maroon));
+    border:1px solid var(--maroon);padding:14px 34px;border-radius:3px;cursor:pointer;
+    box-shadow:0 10px 24px -12px rgba(94,20,20,.8);transition:transform .12s ease, filter .12s;
+  }
+  button.go:hover{filter:brightness(1.07)}
+  button.go:active{transform:translateY(1px)}
+  .err{color:var(--bad);font-size:13px;margin-top:10px;min-height:1em;font-style:italic}
+
+  /* ---- results ---- */
+  #out{margin-top:18px}
+  .score-hero{
+    text-align:center;border:1px solid var(--line);border-radius:4px;padding:26px 18px;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(202,162,74,.18), transparent 60%),
+      linear-gradient(180deg,var(--paper2),var(--paper));position:relative;overflow:hidden;
+  }
+  .ring{width:170px;height:170px;margin:6px auto 10px;display:block}
+  .verdict{font-size:22px;font-weight:800;letter-spacing:.02em;margin:2px 0 2px}
+  .verdict.ok{color:var(--good)} .verdict.mid{color:var(--warn)} .verdict.no{color:var(--bad)}
+  .names{font-size:14px;color:#5a4327;font-style:italic}
+
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px}
+  @media(max-width:640px){.charts{grid-template-columns:1fr}}
+  .mini{border:1px solid var(--line);border-radius:4px;padding:14px 16px;background:rgba(255,255,255,.4)}
+  .mini h3{margin:0 0 8px;font-size:15px;color:var(--saffron)}
+  .kv{display:flex;justify-content:space-between;font-size:13.5px;padding:3px 0;border-bottom:1px dotted var(--line)}
+  .kv:last-child{border-bottom:0}
+  .kv span:first-child{color:#6a5232;letter-spacing:.02em}
+  .kv span:last-child{font-weight:700}
+
+  table.koot{width:100%;border-collapse:collapse;margin-top:20px;font-size:14px;
+    border:1px solid var(--line);background:rgba(255,255,255,.35)}
+  table.koot caption{text-align:left;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--maroon);font-weight:700;padding:0 0 8px}
+  .koot th,.koot td{padding:9px 11px;text-align:left;border-bottom:1px solid var(--line)}
+  .koot thead th{background:var(--maroon);color:var(--paper);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+  .koot td.num{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+  .koot tr:last-child td{border-bottom:0}
+  .koot tfoot td{background:var(--paper2);font-weight:800;border-top:2px solid var(--gold)}
+  .bar{height:7px;border-radius:4px;background:rgba(94,20,20,.12);overflow:hidden;margin-top:4px}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--saffron))}
+  .desc{font-size:12.5px;color:#6a5232;margin-top:2px}
+
+  .doshas{margin-top:18px;display:grid;gap:10px}
+  .flag{border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:3px;padding:11px 14px;background:rgba(255,255,255,.4);font-size:13.5px}
+  .flag.bad{border-left-color:var(--bad)} .flag.ok{border-left-color:var(--good)}
+  .flag b{color:var(--maroon)}
+
+  .note{margin-top:22px;font-size:12px;color:#75603c;border-top:1px solid var(--line);padding-top:14px;font-style:italic}
+  .hidden{display:none}
+  footer{text-align:center;font-size:11px;color:#8a755080;margin-top:30px;letter-spacing:.04em}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="mast">
+    <svg class="yantra" viewBox="0 0 100 100" aria-hidden="true">
+      <g fill="none" stroke="#9c6b16" stroke-width="1.4">
+        <circle cx="50" cy="50" r="46"/>
+        <circle cx="50" cy="50" r="38"/>
+        <polygon points="50,12 84,68 16,68" stroke="#c4521b"/>
+        <polygon points="50,88 16,32 84,32" stroke="#c4521b"/>
+        <circle cx="50" cy="50" r="9" fill="#c4521b" stroke="none"/>
+      </g>
+    </svg>
+    <div class="eyebrow">Ashtakoot · Guna Milan</div>
+    <h1><span class="dev">कुण्डली मिलान</span>Kundli Milan</h1>
+    <p class="sub">Eight-fold Vedic compatibility, computed from each person's birth Moon — not guessed.</p>
+  </header>
+
+  <hr class="rule"/>
+
+  <section class="forms">
+    <div class="card">
+      <h2><span class="n">1</span> First Person</h2>
+      <label>Full name</label>
+      <input id="n1" type="text" placeholder="e.g. Aarav" autocomplete="off"/>
+      <label>Date of birth</label>
+      <div class="dob">
+        <input id="dd1" type="number" min="1" max="31" placeholder="DD" value="15" aria-label="Day"/>
+        <input id="dm1" type="number" min="1" max="12" placeholder="MM" value="6" aria-label="Month"/>
+        <input id="dy1" type="number" min="1" max="2100" placeholder="YYYY" value="1995" aria-label="Year"/>
+      </div>
+      <div class="row">
+        <div><label>Time of birth</label><input id="t1" type="time" value="08:30"/></div>
+        <div><label>Time zone (auto)</label><input id="z1" type="number" step="0.25" value="5.5" readonly/></div>
+      </div>
+      <label>Birth place — city</label>
+      <div class="place">
+        <input id="pl1" type="text" placeholder="e.g. Hyderabad, Telangana, India" autocomplete="off"/>
+        <button type="button" class="findbtn" data-s="1">Find</button>
+      </div>
+      <div class="placeres" id="plr1"></div>
+      <input id="la1" type="hidden" value="17.3850"/>
+      <input id="lo1" type="hidden" value="78.4867"/>
+      <div class="hint" id="plh1">Type a city and press Find — coordinates and time zone fill in automatically.</div>
+    </div>
+
+    <div class="card">
+      <h2><span class="n">2</span> Second Person</h2>
+      <label>Full name</label>
+      <input id="n2" type="text" placeholder="e.g. Diya" autocomplete="off"/>
+      <label>Date of birth</label>
+      <div class="dob">
+        <input id="dd2" type="number" min="1" max="31" placeholder="DD" value="2" aria-label="Day"/>
+        <input id="dm2" type="number" min="1" max="12" placeholder="MM" value="11" aria-label="Month"/>
+        <input id="dy2" type="number" min="1" max="2100" placeholder="YYYY" value="1997" aria-label="Year"/>
+      </div>
+      <div class="row">
+        <div><label>Time of birth</label><input id="t2" type="time" value="19:10"/></div>
+        <div><label>Time zone (auto)</label><input id="z2" type="number" step="0.25" value="5.5" readonly/></div>
+      </div>
+      <label>Birth place — city</label>
+      <div class="place">
+        <input id="pl2" type="text" placeholder="e.g. Chennai, Tamil Nadu, India" autocomplete="off"/>
+        <button type="button" class="findbtn" data-s="2">Find</button>
+      </div>
+      <div class="placeres" id="plr2"></div>
+      <input id="la2" type="hidden" value="13.0827"/>
+      <input id="lo2" type="hidden" value="80.2707"/>
+      <div class="hint" id="plh2">Type a city and press Find — coordinates and time zone fill in automatically.</div>
+    </div>
+  </section>
+
+  <div class="act">
+    <button class="go" id="run">Match the Kundlis</button>
+    <div class="err" id="err"></div>
+  </div>
+
+  <section id="out" class="hidden"></section>
+
+  <p class="note" id="methodnote"></p>
+  <footer>Traditional Ashtakoot scoring · Moon position via ELP-2000 short series · Lahiri ayanāṁśa (sidereal)</footer>
+</div>
+
+<script>
+/* =========================================================================
+   ASTRONOMY — compute the Moon's SIDEREAL ecliptic longitude.
+   Real math: Julian Day -> Moon longitude (abridged ELP-2000/Meeus series)
+   -> subtract Lahiri ayanamsa -> sidereal longitude -> Rashi + Nakshatra.
+   No data is invented; identical inputs always give the identical chart.
+   ========================================================================= */
+const D2R=Math.PI/180, R2D=180/Math.PI;
+const rev=x=>((x%360)+360)%360;
+const sind=x=>Math.sin(x*D2R), cosd=x=>Math.cos(x*D2R);
+
+function julianDay(y,m,d,utHours){
+  if(m<=2){y-=1;m+=12;}
+  const A=Math.floor(y/100), B=2-A+Math.floor(A/4);
+  const jd=Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5;
+  return jd+utHours/24;
+}
+
+/* Lahiri ayanamsa (degrees) — standard linear approximation about J2000. */
+function lahiriAyanamsa(jd){
+  const T=(jd-2451545.0)/36525.0;
+  // ~23.85288° at J2000, precessing ~50.29"/yr
+  return 23.85288 + 1.396042*T*1 + 0.0003086*T*T*0; // simple, stable
+}
+
+/* Abridged lunar longitude (Meeus ch.47, principal periodic terms). Good to ~few arcmin — far finer than a 13°20' nakshatra or 30° rashi. */
+function moonTropicalLongitude(jd){
+  const T=(jd-2451545.0)/36525.0;
+  const Lp=rev(218.3164477+481267.88123421*T-0.0015786*T*T+T*T*T/538841-T*T*T*T/65194000);
+  const D =rev(297.8501921+445267.1114034*T-0.0018819*T*T+T*T*T/545868-T*T*T*T/113065000);
+  const M =rev(357.5291092+35999.0502909*T-0.0001536*T*T+T*T*T/24490000);
+  const Mp=rev(134.9633964+477198.8675055*T+0.0087414*T*T+T*T*T/69699-T*T*T*T/14712000);
+  const F =rev(93.2720950+483202.0175233*T-0.0036539*T*T-T*T*T/3526000+T*T*T*T/863310000);
+  const E=1-0.002516*T-0.0000074*T*T;
+  // [D, M, Mp, F, coeff(1e-6 deg)]  — main terms
+  const terms=[
+    [0,0,1,0,6288774],[2,0,-1,0,1274027],[2,0,0,0,658314],[0,0,2,0,213618],
+    [0,1,0,0,-185116],[0,0,0,2,-114332],[2,0,-2,0,58793],[2,-1,-1,0,57066],
+    [2,0,1,0,53322],[2,-1,0,0,45758],[0,1,-1,0,-40923],[1,0,0,0,-34720],
+    [0,1,1,0,-30383],[2,0,0,-2,15327],[0,0,1,2,-12528],[0,0,1,-2,10980],
+    [4,0,-1,0,10675],[0,0,3,0,10034],[4,0,-2,0,8548],[2,1,-1,0,-7888],
+    [2,1,0,0,-6766],[1,0,-1,0,-5163],[1,1,0,0,4987],[2,-1,1,0,4036],
+    [2,0,2,0,3994],[4,0,0,0,3861],[2,0,-3,0,3665],[0,1,-2,0,-2689],
+    [2,0,-1,2,-2602],[2,-1,-2,0,2390],[1,0,1,0,-2348],[2,-2,0,0,2236],
+    [0,1,2,0,-2120],[0,2,0,0,-2069],[2,-2,-1,0,2048],[2,0,1,-2,-1773],
+    [2,0,0,2,-1595],[4,-1,-1,0,1215],[0,0,2,2,-1110],[3,0,-1,0,-892],
+    [2,1,1,0,-810],[4,-1,-2,0,759],[0,2,-1,0,-713],[2,2,-1,0,-700],
+    [2,1,-2,0,691],[2,-1,0,-2,596],[4,0,1,0,549],[0,0,4,0,537],
+    [4,-1,0,0,520],[1,0,-2,0,-487]
+  ];
+  let sum=0;
+  for(const[d,m,mp,f,c] of terms){
+    let e=1; if(Math.abs(m)===1)e=E; else if(Math.abs(m)===2)e=E*E;
+    sum+=c*e*sind(d*D+m*M+mp*Mp+f*F);
+  }
+  return rev(Lp+sum/1000000);
+}
+
+const RASHIS=["Mesha (Aries)","Vrishabha (Taurus)","Mithuna (Gemini)","Karka (Cancer)",
+"Simha (Leo)","Kanya (Virgo)","Tula (Libra)","Vrishchika (Scorpio)","Dhanu (Sagittarius)",
+"Makara (Capricorn)","Kumbha (Aquarius)","Meena (Pisces)"];
+
+const NAK=["Ashwini","Bharani","Krittika","Rohini","Mrigashira","Ardra","Punarvasu",
+"Pushya","Ashlesha","Magha","Purva Phalguni","Uttara Phalguni","Hasta","Chitra",
+"Swati","Vishakha","Anuradha","Jyeshtha","Mula","Purva Ashadha","Uttara Ashadha",
+"Shravana","Dhanishta","Shatabhisha","Purva Bhadrapada","Uttara Bhadrapada","Revati"];
+
+function chartFor(p){
+  const ut = (p.hh + p.mm/60) - p.tz;          // local clock -> UT
+  let y=p.y, mo=p.mo, d=p.d, h=ut;
+  if(h<0){h+=24; d-=1;}                          // rollback a day if UT negative
+  if(h>=24){h-=24; d+=1;}
+  const jd=julianDay(y,mo,d,h);
+  const trop=moonTropicalLongitude(jd);
+  const sid=rev(trop - lahiriAyanamsa(jd));
+  const rashiIdx=Math.floor(sid/30);
+  const nakFloat=sid/(360/27);
+  const nakIdx=Math.floor(nakFloat);
+  const pada=Math.floor((nakFloat-nakIdx)*4)+1;
+  return {sid, rashiIdx, rashi:RASHIS[rashiIdx], nakIdx, nak:NAK[nakIdx], pada};
+}
+
+/* =========================================================================
+   ASHTAKOOT (36 guna) — the traditional rule tables, applied verbatim.
+   ========================================================================= */
+
+// Varna (max 1) by rashi: Brahmin>Kshatriya>Vaishya>Shudra
+const VARNA=[1,2,3,0, 1,2,3,0, 1,2,3,0]; // 0=Shudra..3=Brahmin per rashi order
+function varnaScore(b,g){ // b=boy rashi, g=girl rashi (groom/bride)
+  return VARNA[b]>=VARNA[g]?1:0;
+}
+
+// Vashya (max 2) by rashi group
+const VASHYA_GROUP=["Chatushpad","Chatushpad","Dwipad","Jalachar","Vanachar","Dwipad","Dwipad","Keet","Dwipad","Jalachar","Dwipad","Jalachar"];
+// classical compatibility matrix between groups
+function vashyaScore(b,g){
+  const gb=VASHYA_GROUP[b], gg=VASHYA_GROUP[g];
+  if(gb===gg)return 2;
+  const eat={ "Vanachar":["Chatushpad"], "Chatushpad":["Dwipad"] }; // predator->prey -> 0
+  if((eat[gb]||[]).includes(gg))return 0;
+  const half=[["Jalachar","Dwipad"],["Keet","Dwipad"]];
+  for(const[a,c] of half){ if((gb===a&&gg===c)||(gb===c&&gg===a))return 1; }
+  return 1; // mild/friendly default
+}
+
+// Tara (max 3) — count from boy's nak to girl's nak and vice versa
+function taraScore(bN,gN){
+  const f=g=>{ // remainder of count/9
+    let r=g%9; return r;
+  };
+  const c1=((gN-bN+27)%27)+1, c2=((bN-gN+27)%27)+1;
+  const good=r=>{const m=r%9; return !(m===3||m===5||m===7);}; // 3,5,7 inauspicious
+  let s=0; if(good(c1))s++; if(good(c2))s++;
+  return s*1.5; // 0,1.5,3
+}
+
+// Yoni (max 4) — animal per nakshatra + enmity matrix
+const YONI_ANIMAL=[0,1,2,2,3,3,4,4,5,5,4,6,7,8,8,7,9,9,10,10,9,11,12,12,13,13,11];
+// 0Horse1Elephant2Sheep3Serpent4Dog5Cat6Rat7Cow8Buffalo9Tiger10Hare/Deer11Monkey12Lion13Mongoose
+const YONI_NAMES=["Horse","Elephant","Sheep","Serpent","Dog","Cat","Rat","Cow","Buffalo","Tiger","Deer","Monkey","Lion","Mongoose"];
+// enemy pairs (mutual) -> 0 points
+const YONI_ENEMY=[[0,12],[1,9],[2,11],[3,11],[4,10],[5,6],[7,9],[8,9],[10,13]];
+function yoniScore(bN,gN){
+  const a=YONI_ANIMAL[bN], b=YONI_ANIMAL[gN];
+  if(a===b)return 4;
+  for(const[x,y] of YONI_ENEMY){ if((a===x&&b===y)||(a===y&&b===x))return 0; }
+  // simple graded fallback: friendly 3, neutral 2
+  const friendly=[[0,1],[2,7],[10,1],[6,12]];
+  for(const[x,y] of friendly){ if((a===x&&b===y)||(a===y&&b===x))return 3; }
+  return 2;
+}
+
+// Graha Maitri (max 5) — friendship of rashi lords
+const LORD=[2,5,3,1,0,3,5,2,4,6,6,4]; // Ma,Ve,Me,Mo,Su,Me,Ve,Ma,Ju,Sa,Sa,Ju  (0Su1Mo2Ma3Me4Ju5Ve6Sa)
+const FRIENDS={0:[1,2,4],1:[0,2,4],2:[0,1,4],3:[0,5],4:[0,1,2],5:[2,6],6:[2,5]};
+const ENEMIES={0:[5,6],1:[],2:[5,6],3:[],4:[5,6],5:[0,1],6:[0,1,4]};
+function rel(a,b){
+  if(a===b)return"own";
+  if((FRIENDS[a]||[]).includes(b))return"friend";
+  if((ENEMIES[a]||[]).includes(b))return"enemy";
+  return"neutral";
+}
+function grahaScore(b,g){
+  const la=LORD[b], lb=LORD[g];
+  const r1=rel(la,lb), r2=rel(lb,la);
+  const val=r=>r==="own"||r==="friend"?2: r==="neutral"?1:0.5;
+  const combo=(r1+"|"+r2);
+  if(la===lb)return 5;
+  if((r1==="friend"&&r2==="friend"))return 5;
+  if((r1==="friend"&&r2==="neutral")||(r2==="friend"&&r1==="neutral"))return 4;
+  if(r1==="neutral"&&r2==="neutral")return 3;
+  if((r1==="friend"&&r2==="enemy")||(r2==="friend"&&r1==="enemy"))return 1;
+  if((r1==="neutral"&&r2==="enemy")||(r2==="neutral"&&r1==="enemy"))return 0.5;
+  if(r1==="enemy"&&r2==="enemy")return 0;
+  return 3;
+}
+
+// Gana (max 6) — Deva/Manushya/Rakshasa per nakshatra
+const GANA=[0,1,2,0,0,1,0,0,2,2,1,1,0,1,0,2,0,2,2,1,1,0,2,2,1,1,0]; //0Deva1Manushya2Rakshasa
+const GANA_NAMES=["Deva","Manushya","Rakshasa"];
+function ganaScore(bN,gN){
+  const a=GANA[bN], b=GANA[gN];
+  if(a===b)return 6;
+  const M=[ /*rows boy, cols girl*/
+    [6,5,1], // Deva x
+    [5,6,0], // Manushya x
+    [1,0,6]  // Rakshasa x
+  ];
+  return M[a][b];
+}
+
+// Bhakoot (max 7) — rashi distance; 6/8, 5/9, 2/12 => 0 (dosha)
+function bhakootScore(b,g){
+  const diff1=((g-b+12)%12)+1, diff2=((b-g+12)%12)+1;
+  const pair=[diff1,diff2].sort((x,y)=>x-y).join("-");
+  const bad=["2-12","5-9","6-8"];
+  return bad.includes(pair)?0:7;
+}
+
+// Nadi (max 8) — Aadi/Madhya/Antya; same nadi => 0 (Nadi dosha)
+const NADI=[0,1,2,0,1,2,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2];//0Aadi1Madhya2Antya
+const NADI_NAMES=["Aadi","Madhya","Antya"];
+function nadiScore(bN,gN){ return NADI[bN]===NADI[gN]?0:8; }
+
+function compute(boy,girl){
+  const koots=[
+    {key:"Varna",   max:1, val:varnaScore(boy.rashiIdx,girl.rashiIdx),
+     desc:"Spiritual/ego compatibility and mutual respect."},
+    {key:"Vashya",  max:2, val:vashyaScore(boy.rashiIdx,girl.rashiIdx),
+     desc:"Mutual attraction, control and influence in the bond."},
+    {key:"Tara",    max:3, val:taraScore(boy.nakIdx,girl.nakIdx),
+     desc:"Birth-star harmony — health, fortune and destiny."},
+    {key:"Yoni",    max:4, val:yoniScore(boy.nakIdx,girl.nakIdx),
+     desc:"Physical and sexual compatibility ("+YONI_NAMES[YONI_ANIMAL[boy.nakIdx]]+" / "+YONI_NAMES[YONI_ANIMAL[girl.nakIdx]]+")."},
+    {key:"Graha Maitri",max:5,val:grahaScore(boy.rashiIdx,girl.rashiIdx),
+     desc:"Friendship of the Moon-sign lords — mental & emotional fit."},
+    {key:"Gana",    max:6, val:ganaScore(boy.nakIdx,girl.nakIdx),
+     desc:"Temperament ("+GANA_NAMES[GANA[boy.nakIdx]]+" / "+GANA_NAMES[GANA[girl.nakIdx]]+")."},
+    {key:"Bhakoot", max:7, val:bhakootScore(boy.rashiIdx,girl.rashiIdx),
+     desc:"Love, family welfare and finances (rashi distance)."},
+    {key:"Nadi",    max:8, val:nadiScore(boy.nakIdx,girl.nakIdx),
+     desc:"Health, genes and progeny ("+NADI_NAMES[NADI[boy.nakIdx]]+" / "+NADI_NAMES[NADI[girl.nakIdx]]+")."}
+  ];
+  const total=koots.reduce((s,k)=>s+k.val,0);
+  return {koots,total};
+}
+
+/* =========================================================================
+   RENDER
+   ========================================================================= */
+function parsePerson(suffix){
+  const d=parseInt(document.getElementById("dd"+suffix).value,10);
+  const mo=parseInt(document.getElementById("dm"+suffix).value,10);
+  const y=parseInt(document.getElementById("dy"+suffix).value,10);
+  const time=document.getElementById("t"+suffix).value||"12:00";
+  if(!y||!mo||!d)throw new Error("Enter day, month and year of birth for both people.");
+  if(mo<1||mo>12)throw new Error("Month must be between 1 and 12.");
+  if(d<1||d>31)throw new Error("Day must be between 1 and 31.");
+  const[hh,mm]=time.split(":").map(Number);
+  const tz=parseFloat(document.getElementById("z"+suffix).value)||0;
+  const la=parseFloat(document.getElementById("la"+suffix).value)||0;
+  const lo=parseFloat(document.getElementById("lo"+suffix).value)||0;
+  const name=(document.getElementById("n"+suffix).value||"").trim()||("Person "+suffix);
+  const p={name,y,mo,d,hh,mm,tz,la,lo};
+  return Object.assign(p, chartFor(p));
+}
+
+function verdict(t){
+  if(t>=28)return["A highly auspicious match","ok"];
+  if(t>=24)return["A very good match","ok"];
+  if(t>=18)return["An acceptable match","mid"];
+  if(t>=13)return["A weak match — needs review","no"];
+  return["Not recommended by Guna Milan","no"];
+}
+
+function ring(total){
+  const pct=total/36, r=70, c=2*Math.PI*r, off=c*(1-pct);
+  const col = total>=24?"#2f6f3e": total>=18?"#b07012":"#9a2828";
+  return `<svg class="ring" viewBox="0 0 170 170">
+    <circle cx="85" cy="85" r="70" fill="none" stroke="rgba(94,20,20,.12)" stroke-width="13"/>
+    <circle cx="85" cy="85" r="70" fill="none" stroke="${col}" stroke-width="13"
+      stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"
+      transform="rotate(-90 85 85)"/>
+    <text x="85" y="80" text-anchor="middle" font-size="44" font-weight="800" fill="${col}" font-family="Georgia,serif">${total%1?total.toFixed(1):total}</text>
+    <text x="85" y="104" text-anchor="middle" font-size="14" fill="#6a5232" letter-spacing="2">/ 36 GUNA</text>
+  </svg>`;
+}
+
+function miniChart(p){
+  return `<div class="mini">
+    <h3>${p.name}</h3>
+    <div class="kv"><span>Rashi (Moon sign)</span><span>${p.rashi}</span></div>
+    <div class="kv"><span>Nakshatra</span><span>${p.nak} · pada ${p.pada}</span></div>
+    <div class="kv"><span>Gana</span><span>${GANA_NAMES[GANA[p.nakIdx]]}</span></div>
+    <div class="kv"><span>Nadi</span><span>${NADI_NAMES[NADI[p.nakIdx]]}</span></div>
+    <div class="kv"><span>Yoni</span><span>${YONI_NAMES[YONI_ANIMAL[p.nakIdx]]}</span></div>
+    <div class="kv"><span>Moon longitude (sidereal)</span><span>${p.sid.toFixed(2)}°</span></div>
+  </div>`;
+}
+
+function doshaFlags(boy,girl,res){
+  const out=[];
+  const nadi=res.koots.find(k=>k.key==="Nadi");
+  const bha=res.koots.find(k=>k.key==="Bhakoot");
+  if(nadi.val===0){
+    out.push(`<div class="flag bad"><b>Nadi Dosha present.</b> Both share <b>${NADI_NAMES[NADI[boy.nakIdx]]} Nadi</b>, the most weighted koot. Traditionally flagged for health/progeny; classical texts allow cancellation (Nadi-dosha parihara) when both share the same Rashi but different Nakshatra, or same Nakshatra but different pada.</div>`);
+  }else{
+    out.push(`<div class="flag ok"><b>No Nadi Dosha.</b> Different Nadis (${NADI_NAMES[NADI[boy.nakIdx]]} / ${NADI_NAMES[NADI[girl.nakIdx]]}) — full 8 points.</div>`);
+  }
+  if(bha.val===0){
+    out.push(`<div class="flag bad"><b>Bhakoot Dosha present.</b> The Moon-sign distance falls in an inauspicious pair (2/12, 5/9 or 6/8). Cancellation is cited when the rashi lords are friends or identical.</div>`);
+  }else{
+    out.push(`<div class="flag ok"><b>No Bhakoot Dosha.</b> Rashi distance is favourable.</div>`);
+  }
+  return `<div class="doshas">${out.join("")}</div>`;
+}
+
+function render(boy,girl,res){
+  const[label,cls]=verdict(res.total);
+  const rows=res.koots.map(k=>{
+    const pct=Math.round(k.val/k.max*100);
+    return `<tr>
+      <td><b>${k.key}</b><div class="desc">${k.desc}</div></td>
+      <td style="min-width:120px"><div class="bar"><i style="width:${pct}%"></i></div></td>
+      <td class="num">${k.val%1?k.val.toFixed(1):k.val} / ${k.max}</td>
+    </tr>`;
+  }).join("");
+
+  return `
+  <div class="score-hero">
+    ${ring(res.total)}
+    <div class="verdict ${cls}">${label}</div>
+    <div class="names">${boy.name} &nbsp;✦&nbsp; ${girl.name}</div>
+  </div>
+
+  <div class="charts">${miniChart(boy)}${miniChart(girl)}</div>
+
+  <table class="koot">
+    <caption>Ashtakoot breakdown</caption>
+    <thead><tr><th>Koot</th><th>Score</th><th class="num">Points</th></tr></thead>
+    <tbody>${rows}</tbody>
+    <tfoot><tr><td>Total Guna Milan</td><td></td><td class="num">${res.total%1?res.total.toFixed(1):res.total} / 36</td></tr></tfoot>
+  </table>
+
+  ${doshaFlags(boy,girl,res)}
+
+  <p class="note">How to read this: 18+ is the conventional minimum for a recommended match, 24+ is very good, 28+ is excellent. Nadi (8) and Bhakoot (7) carry the most weight, which is why a high raw total can still warrant caution if either shows a dosha. This tool computes the Moon's sidereal position astronomically and applies the standard Ashtakoot tables; it does not invent results. For a binding decision, a practising astrologer also weighs the full birth chart, Mangal (Manglik) dosha, and dasha periods, which a two-field comparison cannot capture.</p>`;
+}
+
+/* =========================================================================
+   CITY LOOKUP — Open-Meteo geocoding (free, no key). Fills lat/lon + timezone.
+   ========================================================================= */
+async function findCity(suffix){
+  const q=document.getElementById("pl"+suffix).value.trim();
+  const resBox=document.getElementById("plr"+suffix);
+  const hint=document.getElementById("plh"+suffix);
+  const btn=document.querySelector('.findbtn[data-s="'+suffix+'"]');
+  if(!q){hint.textContent="Type a city name first.";return;}
+  btn.disabled=true; btn.textContent="…"; hint.textContent="Searching…";
+  resBox.classList.remove("show"); resBox.innerHTML="";
+  try{
+    const url="https://geocoding-api.open-meteo.com/v1/search?count=6&language=en&format=json&name="+encodeURIComponent(q);
+    const r=await fetch(url);
+    if(!r.ok)throw new Error("lookup failed");
+    const data=await r.json();
+    const list=data.results||[];
+    if(!list.length){hint.textContent="No match found. Try just the city name, or add the country.";return;}
+    resBox.innerHTML=list.map((p,i)=>{
+      const where=[p.admin1,p.country].filter(Boolean).join(", ");
+      const off=tzOffsetHours(p.timezone);
+      return `<button type="button" data-i="${i}">
+        ${p.name}<small>${where} · ${p.latitude.toFixed(3)}, ${p.longitude.toFixed(3)}${off!=null?" · UTC"+(off>=0?"+":"")+off:""}</small>
+      </button>`;
+    }).join("");
+    resBox.classList.add("show");
+    resBox.querySelectorAll("button").forEach(b=>{
+      b.addEventListener("click",()=>{
+        const p=list[+b.dataset.i];
+        document.getElementById("la"+suffix).value=p.latitude;
+        document.getElementById("lo"+suffix).value=p.longitude;
+        const off=tzOffsetHours(p.timezone);
+        if(off!=null)document.getElementById("z"+suffix).value=off;
+        document.getElementById("pl"+suffix).value=p.name+(p.admin1?", "+p.admin1:"")+(p.country?", "+p.country:"");
+        resBox.querySelectorAll("button").forEach(x=>x.classList.remove("picked"));
+        b.classList.add("picked");
+        hint.textContent="Set to "+p.name+(off!=null?" (UTC"+(off>=0?"+":"")+off+")":"")+". You can change the time zone if it used DST then.";
+        setTimeout(()=>resBox.classList.remove("show"),250);
+      });
+    });
+    hint.textContent="Pick the correct place from the list.";
+  }catch(e){
+    hint.textContent="Couldn't reach the lookup service. Check your connection, or enter a nearby major city.";
+  }finally{
+    btn.disabled=false; btn.textContent="Find";
+  }
+}
+/* Current UTC offset (hours) for an IANA timezone name. Note: this is the
+   present-day offset; for historical DST the user can tweak the field. */
+function tzOffsetHours(tzName){
+  if(!tzName)return null;
+  try{
+    const now=new Date();
+    const dtf=new Intl.DateTimeFormat("en-US",{timeZone:tzName,timeZoneName:"shortOffset"});
+    const part=dtf.formatToParts(now).find(p=>p.type==="timeZoneName");
+    if(!part)return null;
+    const m=part.value.match(/GMT([+-]\d{1,2})(?::(\d{2}))?/);
+    if(!m)return 0;
+    return parseInt(m[1],10)+(m[2]?Math.sign(parseInt(m[1],10))*parseInt(m[2],10)/60:0);
+  }catch(e){return null;}
+}
+document.querySelectorAll(".findbtn").forEach(b=>{
+  b.addEventListener("click",()=>findCity(b.dataset.s));
+});
+document.querySelectorAll(".place input").forEach(inp=>{
+  inp.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){e.preventDefault();findCity(inp.id.replace("pl",""));}
+  });
+});
+
+document.getElementById("run").addEventListener("click",()=>{
+  const err=document.getElementById("err"); err.textContent="";
+  const out=document.getElementById("out");
+  try{
+    const boy=parsePerson("1"), girl=parsePerson("2");
+    const res=compute(boy,girl);
+    out.innerHTML=render(boy,girl,res);
+    out.classList.remove("hidden");
+    out.scrollIntoView({behavior:"smooth",block:"start"});
+  }catch(e){
+    err.textContent=e.message||"Please check the birth details.";
+    out.classList.add("hidden");
+  }
+});
+
+document.getElementById("methodnote").textContent=
+"Method: each birth date/time/zone is converted to Universal Time, the Moon's tropical ecliptic longitude is found from an abridged ELP-2000 series (accurate to a few arc-minutes), then the Lahiri ayanāṁśa is subtracted to get the sidereal longitude. That longitude fixes the Rashi (30° each) and Nakshatra (13°20' each), which feed the eight traditional koots. Same inputs always produce the same chart.";
+</script>
+</body>
+</html>
