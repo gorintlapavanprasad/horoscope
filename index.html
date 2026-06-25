@@ -160,32 +160,30 @@
 
   <section class="forms">
     <div class="card">
-      <h2><span class="n">1</span> First Person</h2>
+      <h2><span class="n">1</span> Sethu's Profile</h2>
       <label>Full name</label>
-      <input id="n1" type="text" placeholder="e.g. Aarav" autocomplete="off"/>
+      <input id="n1" type="text" value="Sethu Prasad Gorintla" readonly/>
       <label>Date of birth</label>
       <div class="dob">
-        <input id="dd1" type="number" min="1" max="31" placeholder="DD" value="15" aria-label="Day"/>
-        <input id="dm1" type="number" min="1" max="12" placeholder="MM" value="6" aria-label="Month"/>
-        <input id="dy1" type="number" min="1" max="2100" placeholder="YYYY" value="1995" aria-label="Year"/>
+        <input id="dd1" type="number" value="8" readonly aria-label="Day"/>
+        <input id="dm1" type="number" value="6" readonly aria-label="Month"/>
+        <input id="dy1" type="number" value="1996" readonly aria-label="Year"/>
       </div>
       <div class="row">
-        <div><label>Time of birth</label><input id="t1" type="time" value="08:30"/></div>
+        <div><label>Time of birth</label><input id="t1" type="time" value="15:09" readonly/></div>
         <div><label>Time zone (auto)</label><input id="z1" type="number" step="0.25" value="5.5" readonly/></div>
       </div>
       <label>Birth place — city</label>
       <div class="place">
-        <input id="pl1" type="text" placeholder="e.g. Hyderabad, Telangana, India" autocomplete="off"/>
-        <button type="button" class="findbtn" data-s="1">Find</button>
+        <input id="pl1" type="text" value="Chittoor, Andhra Pradesh, India" readonly/>
       </div>
-      <div class="placeres" id="plr1"></div>
-      <input id="la1" type="hidden" value="17.3850"/>
-      <input id="lo1" type="hidden" value="78.4867"/>
-      <div class="hint" id="plh1">Type a city and press Find — coordinates and time zone fill in automatically.</div>
+      <input id="la1" type="hidden" value="13.2172"/>
+      <input id="lo1" type="hidden" value="79.1003"/>
+      <div class="hint" id="plh1">Fixed profile — born 8 June 1996, 3:09 PM, Chittoor.</div>
     </div>
 
     <div class="card">
-      <h2><span class="n">2</span> Second Person</h2>
+      <h2><span class="n">2</span> Match Candidate</h2>
       <label>Full name</label>
       <input id="n2" type="text" placeholder="e.g. Diya" autocomplete="off"/>
       <label>Date of birth</label>
