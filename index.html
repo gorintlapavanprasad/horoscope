@@ -30,6 +30,13 @@
     line-height:1.55;
   }
   .wrap{max-width:1020px;margin:0 auto;padding:clamp(18px,4vw,40px)}
+  .langbar{display:flex;justify-content:center;gap:0;margin-bottom:10px}
+  .lang{font:inherit;font-size:13px;font-weight:700;letter-spacing:.04em;
+    color:var(--maroon);background:rgba(255,255,255,.5);border:1px solid var(--line);
+    padding:7px 18px;cursor:pointer}
+  .lang:first-child{border-radius:4px 0 0 4px;border-right:0}
+  .lang:last-child{border-radius:0 4px 4px 0}
+  .lang.active{background:var(--maroon);color:var(--paper);border-color:var(--maroon)}
   /* ---- masthead ---- */
   header.mast{text-align:center;padding-top:8px}
   .yantra{width:78px;height:78px;margin:0 auto 6px;display:block}
@@ -136,10 +143,44 @@
   .note{margin-top:22px;font-size:12px;color:#75603c;border-top:1px solid var(--line);padding-top:14px;font-style:italic}
   .hidden{display:none}
   footer{text-align:center;font-size:11px;color:#8a755080;margin-top:30px;letter-spacing:.04em}
+
+  /* ---------- mobile fixes ---------- */
+  @media(max-width:560px){
+    .wrap{padding:16px 14px}
+    h1{font-size:clamp(30px,9vw,44px)}
+    .sub{font-size:14px}
+    .card{padding:16px 15px 18px}
+    .card::before{inset:4px}
+    /* stack the time / time-zone pair so nothing is squeezed */
+    .row{grid-template-columns:1fr;gap:0}
+    /* keep DD MM YYYY readable */
+    .dob{grid-template-columns:1fr 1fr 1.5fr;gap:8px}
+    .dob input{padding:9px 6px}
+    /* charts already stack at 640; tighten spacing */
+    .charts{gap:12px}
+    /* score table: drop the progress-bar column, give text room */
+    .koot th,.koot td{padding:8px 8px;font-size:13px}
+    .koot col.barcol,.koot td.barcell,.koot th.barhead{display:none}
+    .koot td.num{font-size:13px}
+    .desc{font-size:12px}
+    .verdict{font-size:19px}
+    .score-hero{padding:22px 12px}
+    .findbtn{padding:0 12px;font-size:11px}
+    .flag{font-size:13px}
+  }
+  @media(max-width:380px){
+    .dob{grid-template-columns:1fr 1fr 1.4fr;gap:6px}
+    .koot th,.koot td{padding:7px 6px}
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
+
+  <div class="langbar">
+    <button class="lang active" data-lang="en">English</button>
+    <button class="lang" data-lang="te">తెలుగు</button>
+  </div>
 
   <header class="mast">
     <svg class="yantra" viewBox="0 0 100 100" aria-hidden="true">
@@ -151,72 +192,72 @@
         <circle cx="50" cy="50" r="9" fill="#c4521b" stroke="none"/>
       </g>
     </svg>
-    <div class="eyebrow">Ashtakoot · Guna Milan</div>
-    <h1><span class="dev">कुण्डली मिलान</span>Kundli Milan</h1>
-    <p class="sub">Eight-fold Vedic compatibility, computed from each person's birth Moon — not guessed.</p>
+    <div class="eyebrow" data-i18n="eyebrow">Ashtakoot · Guna Milan</div>
+    <h1><span class="dev">కుండలి మిలన్</span><span data-i18n="title">Kundli Milan</span></h1>
+    <p class="sub" data-i18n="sub">Eight-fold Vedic compatibility, computed from each person's birth Moon — not guessed.</p>
   </header>
 
   <hr class="rule"/>
 
   <section class="forms">
     <div class="card">
-      <h2><span class="n">1</span> Sethu's Profile</h2>
-      <label>Full name</label>
+      <h2><span class="n">1</span> <span data-i18n="p1title">Sethu's Profile</span></h2>
+      <label data-i18n="fullname">Full name</label>
       <input id="n1" type="text" value="Sethu Prasad Gorintla" readonly/>
-      <label>Date of birth</label>
+      <label data-i18n="dob">Date of birth</label>
       <div class="dob">
         <input id="dd1" type="number" value="8" readonly aria-label="Day"/>
         <input id="dm1" type="number" value="6" readonly aria-label="Month"/>
         <input id="dy1" type="number" value="1996" readonly aria-label="Year"/>
       </div>
       <div class="row">
-        <div><label>Time of birth</label><input id="t1" type="time" value="15:09" readonly/></div>
-        <div><label>Time zone (auto)</label><input id="z1" type="number" step="0.25" value="5.5" readonly/></div>
+        <div><label data-i18n="tob">Time of birth</label><input id="t1" type="time" value="15:09" readonly/></div>
+        <div><label data-i18n="tz">Time zone (auto)</label><input id="z1" type="number" step="0.25" value="5.5" readonly/></div>
       </div>
-      <label>Birth place — city</label>
+      <label data-i18n="place">Birth place — city</label>
       <div class="place">
         <input id="pl1" type="text" value="Chittoor, Andhra Pradesh, India" readonly/>
       </div>
       <input id="la1" type="hidden" value="13.2172"/>
       <input id="lo1" type="hidden" value="79.1003"/>
-      <div class="hint" id="plh1">Fixed profile — born 8 June 1996, 3:09 PM, Chittoor.</div>
+      <div class="hint" id="plh1" data-i18n="p1hint">Fixed profile — born 8 June 1996, 3:09 PM, Chittoor.</div>
     </div>
 
     <div class="card">
-      <h2><span class="n">2</span> Match Candidate</h2>
-      <label>Full name</label>
-      <input id="n2" type="text" placeholder="e.g. Diya" autocomplete="off"/>
-      <label>Date of birth</label>
+      <h2><span class="n">2</span> <span data-i18n="p2title">Match Candidate</span></h2>
+      <label data-i18n="fullname">Full name</label>
+      <input id="n2" type="text" placeholder="" autocomplete="off"/>
+      <label data-i18n="dob">Date of birth</label>
       <div class="dob">
         <input id="dd2" type="number" min="1" max="31" placeholder="DD" value="2" aria-label="Day"/>
         <input id="dm2" type="number" min="1" max="12" placeholder="MM" value="11" aria-label="Month"/>
         <input id="dy2" type="number" min="1" max="2100" placeholder="YYYY" value="1997" aria-label="Year"/>
       </div>
       <div class="row">
-        <div><label>Time of birth</label><input id="t2" type="time" value="19:10"/></div>
-        <div><label>Time zone (auto)</label><input id="z2" type="number" step="0.25" value="5.5" readonly/></div>
+        <div><label data-i18n="tob">Time of birth</label><input id="t2" type="time" value="19:10"/></div>
+        <div><label data-i18n="tz">Time zone (auto)</label><input id="z2" type="number" step="0.25" value="5.5" readonly/></div>
       </div>
-      <label>Birth place — city</label>
+      <label data-i18n="place">Birth place — city</label>
       <div class="place">
-        <input id="pl2" type="text" placeholder="e.g. Chennai, Tamil Nadu, India" autocomplete="off"/>
-        <button type="button" class="findbtn" data-s="2">Find</button>
+        <input id="pl2" type="text" placeholder="" autocomplete="off"/>
+        <button type="button" class="findbtn" data-s="2" data-i18n="find">Find</button>
       </div>
       <div class="placeres" id="plr2"></div>
       <input id="la2" type="hidden" value="13.0827"/>
       <input id="lo2" type="hidden" value="80.2707"/>
-      <div class="hint" id="plh2">Type a city and press Find — coordinates and time zone fill in automatically.</div>
+      <div class="hint" id="plh2" data-i18n="p2hint">Type a city and press Find — coordinates and time zone fill in automatically.</div>
     </div>
   </section>
 
   <div class="act">
-    <button class="go" id="run">Match the Kundlis</button>
+    <button class="go" id="run" data-i18n="run">Match the Kundlis</button>
     <div class="err" id="err"></div>
   </div>
 
   <section id="out" class="hidden"></section>
 
   <p class="note" id="methodnote"></p>
-  <footer>Traditional Ashtakoot scoring · Moon position via ELP-2000 short series · Lahiri ayanāṁśa (sidereal)</footer>
+  <footer data-i18n="footer">Traditional Ashtakoot scoring · Moon position via ELP-2000 short series · Lahiri ayanāṁśa (sidereal)</footer>
 </div>
 
 <script>
@@ -276,6 +317,148 @@ function moonTropicalLongitude(jd){
   }
   return rev(Lp+sum/1000000);
 }
+
+/* =========================================================================
+   LANGUAGE / i18n
+   ========================================================================= */
+let LANG="en";
+
+const I18N={
+  en:{
+    eyebrow:"Ashtakoot · Guna Milan",
+    title:"Kundli Milan",
+    sub:"Eight-fold Vedic compatibility, computed from each person's birth Moon — not guessed.",
+    p1title:"Sethu's Profile",
+    p2title:"Match Candidate",
+    fullname:"Full name",
+    dob:"Date of birth",
+    tob:"Time of birth",
+    tz:"Time zone (auto)",
+    place:"Birth place — city",
+    find:"Find",
+    run:"Match the Kundlis",
+    p1hint:"Fixed profile — born 8 June 1996, 3:09 PM, Chittoor.",
+    p2hint:"Type a city and press Find — coordinates and time zone fill in automatically.",
+    footer:"Traditional Ashtakoot scoring · Moon position via ELP-2000 short series · Lahiri ayanāṁśa (sidereal)",
+    namePH:"e.g. Diya",
+    cityPH:"e.g. Chennai, Tamil Nadu, India",
+    // results
+    rashiLbl:"Rashi (Moon sign)", nakLbl:"Nakshatra", ganaLbl:"Gana",
+    nadiLbl:"Nadi", yoniLbl:"Yoni", moonLbl:"Moon longitude (sidereal)",
+    pada:"pada",
+    kootHead:"Koot", scoreHead:"Score", pointsHead:"Points",
+    breakdown:"Ashtakoot breakdown", total:"Total Guna Milan",
+    namesJoin:"✦",
+    // koot names
+    k_Varna:"Varna", k_Vashya:"Vashya", k_Tara:"Tara", k_Yoni:"Yoni",
+    "k_Graha Maitri":"Graha Maitri", k_Gana:"Gana", k_Bhakoot:"Bhakoot", k_Nadi:"Nadi",
+    // koot descriptions
+    d_Varna:"Spiritual/ego compatibility and mutual respect.",
+    d_Vashya:"Mutual attraction, control and influence in the bond.",
+    d_Tara:"Birth-star harmony — health, fortune and destiny.",
+    d_Yoni:(a,b)=>`Physical and sexual compatibility (${a} / ${b}).`,
+    "d_Graha Maitri":"Friendship of the Moon-sign lords — mental & emotional fit.",
+    d_Gana:(a,b)=>`Temperament (${a} / ${b}).`,
+    d_Bhakoot:"Love, family welfare and finances (rashi distance).",
+    d_Nadi:(a,b)=>`Health, genes and progeny (${a} / ${b}).`,
+    // verdicts
+    v_excellent:"A highly auspicious match",
+    v_verygood:"A very good match",
+    v_ok:"An acceptable match",
+    v_weak:"A weak match — needs review",
+    v_no:"Not recommended by Guna Milan",
+    // doshas
+    nadiBad:(n)=>`<b>Nadi Dosha present.</b> Both share <b>${n} Nadi</b>, the most weighted koot. Traditionally flagged for health/progeny; classical texts allow cancellation when both share the same Rashi but a different Nakshatra, or the same Nakshatra but a different pada.`,
+    nadiOk:(a,b)=>`<b>No Nadi Dosha.</b> Different Nadis (${a} / ${b}) — full 8 points.`,
+    bhaBad:`<b>Bhakoot Dosha present.</b> The Moon-sign distance falls in an inauspicious pair (2/12, 5/9 or 6/8). Cancellation is cited when the rashi lords are friends or identical.`,
+    bhaOk:`<b>No Bhakoot Dosha.</b> Rashi distance is favourable.`,
+    howto:"How to read this: 18+ is the conventional minimum for a recommended match, 24+ is very good, 28+ is excellent. Nadi (8) and Bhakoot (7) carry the most weight, which is why a high raw total can still warrant caution if either shows a dosha. This tool computes the Moon's sidereal position astronomically and applies the standard Ashtakoot tables; it does not invent results. For a binding decision, a practising astrologer also weighs the full birth chart, Mangal (Manglik) dosha, and dasha periods, which a two-field comparison cannot capture.",
+    errDate:"Enter day, month and year of birth for both people.",
+    errMonth:"Month must be between 1 and 12.",
+    errDay:"Day must be between 1 and 31.",
+    errCity:"Type a city name first.",
+    searching:"Searching…",
+    noMatch:"No match found. Try just the city name, or add the country.",
+    pickPlace:"Pick the correct place from the list.",
+    lookupFail:"Couldn't reach the lookup service. Check your connection, or enter a nearby major city.",
+    setTo:(n,o)=>`Set to ${n}${o!=null?" (UTC"+(o>=0?"+":"")+o+")":""}. You can change the time zone if it used DST then.`,
+    methodnote:"Method: each birth date/time/zone is converted to Universal Time, the Moon's tropical ecliptic longitude is found from an abridged ELP-2000 series (accurate to a few arc-minutes), then the Lahiri ayanāṁśa is subtracted to get the sidereal longitude. That longitude fixes the Rashi (30° each) and Nakshatra (13°20' each), which feed the eight traditional koots. Same inputs always produce the same chart."
+  },
+  te:{
+    eyebrow:"అష్టకూట · గుణ మిలన్",
+    title:"కుండలి మిలన్",
+    sub:"ఎనిమిది కూటాల వేద జాతక పొంతన — ప్రతి వ్యక్తి జనన చంద్రుని ఆధారంగా లెక్కించబడింది.",
+    p1title:"సేతు జాతకం",
+    p2title:"పొంతన కోసం వ్యక్తి",
+    fullname:"పూర్తి పేరు",
+    dob:"జనన తేదీ",
+    tob:"జనన సమయం",
+    tz:"టైమ్ జోన్ (ఆటో)",
+    place:"జనన స్థలం — నగరం",
+    find:"వెతకండి",
+    run:"కుండలి పొంతన చూడండి",
+    p1hint:"నిర్ణీత జాతకం — జననం 8 జూన్ 1996, మధ్యాహ్నం 3:09, చిత్తూరు.",
+    p2hint:"నగరం పేరు టైప్ చేసి 'వెతకండి' నొక్కండి — అక్షాంశాలు, టైమ్ జోన్ ఆటోమేటిక్‌గా నిండుతాయి.",
+    footer:"సాంప్రదాయ అష్టకూట లెక్కింపు · చంద్ర స్థానం ELP-2000 ద్వారా · లాహిరి అయనాంశ (నిరయన)",
+    namePH:"ఉదా: దియా",
+    cityPH:"ఉదా: చెన్నై, తమిళనాడు, భారతదేశం",
+    rashiLbl:"రాశి (చంద్ర రాశి)", nakLbl:"నక్షత్రం", ganaLbl:"గణం",
+    nadiLbl:"నాడి", yoniLbl:"యోని", moonLbl:"చంద్ర స్థానం (నిరయన)",
+    pada:"పాదం",
+    kootHead:"కూటం", scoreHead:"స్కోర్", pointsHead:"పాయింట్లు",
+    breakdown:"అష్టకూట వివరణ", total:"మొత్తం గుణ మిలన్",
+    namesJoin:"✦",
+    k_Varna:"వర్ణ", k_Vashya:"వశ్య", k_Tara:"తార", k_Yoni:"యోని",
+    "k_Graha Maitri":"గ్రహ మైత్రి", k_Gana:"గణ", k_Bhakoot:"భకూట", k_Nadi:"నాడి",
+    d_Varna:"ఆధ్యాత్మిక/అహం పొంతన మరియు పరస్పర గౌరవం.",
+    d_Vashya:"పరస్పర ఆకర్షణ, నియంత్రణ మరియు ప్రభావం.",
+    d_Tara:"జన్మ నక్షత్ర సామరస్యం — ఆరోగ్యం, అదృష్టం, విధి.",
+    d_Yoni:(a,b)=>`శారీరక మరియు లైంగిక పొంతన (${a} / ${b}).`,
+    "d_Graha Maitri":"రాశ్యాధిపతుల మైత్రి — మానసిక, భావోద్వేగ పొంతన.",
+    d_Gana:(a,b)=>`స్వభావం (${a} / ${b}).`,
+    d_Bhakoot:"ప్రేమ, కుటుంబ క్షేమం, ఆర్థిక స్థితి (రాశి దూరం).",
+    d_Nadi:(a,b)=>`ఆరోగ్యం, వంశం, సంతానం (${a} / ${b}).`,
+    v_excellent:"చాలా శుభప్రదమైన పొంతన",
+    v_verygood:"చాలా మంచి పొంతన",
+    v_ok:"ఆమోదయోగ్యమైన పొంతన",
+    v_weak:"బలహీనమైన పొంతన — పునఃపరిశీలన అవసరం",
+    v_no:"గుణ మిలన్ ప్రకారం సిఫార్సు చేయబడలేదు",
+    nadiBad:(n)=>`<b>నాడి దోషం ఉంది.</b> ఇద్దరికీ <b>${n} నాడి</b> ఒకటే — ఇది అత్యధిక ప్రాధాన్యత కూటం. ఆరోగ్యం/సంతానం దృష్ట్యా దోషంగా పరిగణిస్తారు; ఒకే రాశి కానీ వేరే నక్షత్రం, లేదా ఒకే నక్షత్రం కానీ వేరే పాదం ఉంటే పరిహారం కలదని శాస్త్రాలు చెబుతాయి.`,
+    nadiOk:(a,b)=>`<b>నాడి దోషం లేదు.</b> వేర్వేరు నాడులు (${a} / ${b}) — పూర్తి 8 పాయింట్లు.`,
+    bhaBad:`<b>భకూట దోషం ఉంది.</b> చంద్ర రాశుల దూరం అశుభ జతలో (2/12, 5/9 లేదా 6/8) ఉంది. రాశ్యాధిపతులు మిత్రులైనా లేదా ఒకటే అయినా పరిహారం ఉంటుందని చెబుతారు.`,
+    bhaOk:`<b>భకూట దోషం లేదు.</b> రాశి దూరం అనుకూలంగా ఉంది.`,
+    howto:"ఎలా చదవాలి: సిఫార్సు చేయదగిన పొంతనకు సాధారణంగా 18+ కనీసం, 24+ చాలా మంచిది, 28+ అత్యుత్తమం. నాడి (8), భకూట (7) అత్యధిక ప్రాధాన్యత కలిగినవి; అందుకే ఎక్కువ మొత్తం వచ్చినా ఈ రెండింటిలో దోషం ఉంటే జాగ్రత్త అవసరం. ఈ సాధనం చంద్రుని నిరయన స్థానాన్ని ఖగోళశాస్త్ర పద్ధతిలో లెక్కించి సాంప్రదాయ అష్టకూట పట్టికలను వర్తింపజేస్తుంది; ఫలితాలను కల్పించదు. తుది నిర్ణయానికి అనుభవజ్ఞుడైన జ్యోతిష్కుడు పూర్తి జాతకం, మాంగళిక దోషం, దశలను కూడా పరిశీలిస్తారు — వీటిని ఈ రెండు-క్షేత్ర పోలిక చూపలేదు.",
+    errDate:"ఇద్దరికీ జనన తేదీ, నెల, సంవత్సరం నమోదు చేయండి.",
+    errMonth:"నెల 1 నుండి 12 మధ్య ఉండాలి.",
+    errDay:"తేదీ 1 నుండి 31 మధ్య ఉండాలి.",
+    errCity:"ముందుగా నగరం పేరు టైప్ చేయండి.",
+    searching:"వెతుకుతోంది…",
+    noMatch:"పొంతన దొరకలేదు. నగరం పేరు మాత్రమే, లేదా దేశం పేరు జోడించి ప్రయత్నించండి.",
+    pickPlace:"జాబితా నుండి సరైన స్థలాన్ని ఎంచుకోండి.",
+    lookupFail:"సేవను చేరుకోలేకపోయాం. ఇంటర్నెట్ చూసుకోండి, లేదా సమీప పెద్ద నగరం నమోదు చేయండి.",
+    setTo:(n,o)=>`${n}కి సెట్ చేయబడింది${o!=null?" (UTC"+(o>=0?"+":"")+o+")":""}. ఆ సమయంలో DST ఉంటే టైమ్ జోన్ మార్చవచ్చు.`,
+    methodnote:"పద్ధతి: ప్రతి జనన తేదీ/సమయం/జోన్‌ను యూనివర్సల్ టైమ్‌కు మార్చి, చంద్రుని సాయన రేఖాంశాన్ని సంక్షిప్త ELP-2000 శ్రేణి ద్వారా (కొన్ని ఆర్క్-నిమిషాల ఖచ్చితత్వం) లెక్కించి, లాహిరి అయనాంశను తీసివేసి నిరయన రేఖాంశాన్ని పొందుతాం. ఈ రేఖాంశం రాశి (ఒక్కొక్కటి 30°) మరియు నక్షత్రాన్ని (ఒక్కొక్కటి 13°20') నిర్ణయిస్తుంది, ఇవి ఎనిమిది సాంప్రదాయ కూటాలకు ఆధారం. ఒకే ఇన్‌పుట్‌లు ఎల్లప్పుడూ ఒకే జాతకాన్ని ఇస్తాయి."
+  }
+};
+const T=k=>{const v=I18N[LANG][k]; return v!==undefined?v:I18N.en[k];};
+
+/* Telugu transliterations of the core astrology terms */
+const RASHIS_TE=["మేష (Aries)","వృషభ (Taurus)","మిథున (Gemini)","కర్కాటక (Cancer)",
+"సింహ (Leo)","కన్య (Virgo)","తుల (Libra)","వృశ్చిక (Scorpio)","ధనుస్సు (Sagittarius)",
+"మకర (Capricorn)","కుంభ (Aquarius)","మీన (Pisces)"];
+const NAK_TE=["అశ్విని","భరణి","కృత్తిక","రోహిణి","మృగశిర","ఆరుద్ర","పునర్వసు",
+"పుష్యమి","ఆశ్లేష","మఖ","పుబ్బ","ఉత్తర","హస్త","చిత్త",
+"స్వాతి","విశాఖ","అనురాధ","జ్యేష్ఠ","మూల","పూర్వాషాఢ","ఉత్తరాషాఢ",
+"శ్రవణం","ధనిష్ఠ","శతభిష","పూర్వాభాద్ర","ఉత్తరాభాద్ర","రేవతి"];
+const YONI_TE=["గుర్రం","ఏనుగు","గొర్రె","పాము","కుక్క","పిల్లి","ఎలుక","ఆవు","గేదె","పులి","జింక","కోతి","సింహం","ముంగిస"];
+const GANA_TE=["దేవ","మనుష్య","రాక్షస"];
+const NADI_TE=["ఆది","మధ్య","అంత్య"];
+
+const tRashi=i=>LANG==="te"?RASHIS_TE[i]:RASHIS[i];
+const tNak=i=>LANG==="te"?NAK_TE[i]:NAK[i];
+const tYoni=i=>LANG==="te"?YONI_TE[i]:YONI_NAMES[i];
+const tGana=i=>LANG==="te"?GANA_TE[i]:GANA_NAMES[i];
+const tNadi=i=>LANG==="te"?NADI_TE[i]:NADI_NAMES[i];
 
 const RASHIS=["Mesha (Aries)","Vrishabha (Taurus)","Mithuna (Gemini)","Karka (Cancer)",
 "Simha (Leo)","Kanya (Virgo)","Tula (Libra)","Vrishchika (Scorpio)","Dhanu (Sagittarius)",
@@ -405,25 +588,31 @@ function nadiScore(bN,gN){ return NADI[bN]===NADI[gN]?0:8; }
 
 function compute(boy,girl){
   const koots=[
-    {key:"Varna",   max:1, val:varnaScore(boy.rashiIdx,girl.rashiIdx),
-     desc:"Spiritual/ego compatibility and mutual respect."},
-    {key:"Vashya",  max:2, val:vashyaScore(boy.rashiIdx,girl.rashiIdx),
-     desc:"Mutual attraction, control and influence in the bond."},
-    {key:"Tara",    max:3, val:taraScore(boy.nakIdx,girl.nakIdx),
-     desc:"Birth-star harmony — health, fortune and destiny."},
+    {key:"Varna",   max:1, val:varnaScore(boy.rashiIdx,girl.rashiIdx)},
+    {key:"Vashya",  max:2, val:vashyaScore(boy.rashiIdx,girl.rashiIdx)},
+    {key:"Tara",    max:3, val:taraScore(boy.nakIdx,girl.nakIdx)},
     {key:"Yoni",    max:4, val:yoniScore(boy.nakIdx,girl.nakIdx),
-     desc:"Physical and sexual compatibility ("+YONI_NAMES[YONI_ANIMAL[boy.nakIdx]]+" / "+YONI_NAMES[YONI_ANIMAL[girl.nakIdx]]+")."},
-    {key:"Graha Maitri",max:5,val:grahaScore(boy.rashiIdx,girl.rashiIdx),
-     desc:"Friendship of the Moon-sign lords — mental & emotional fit."},
+     args:[YONI_ANIMAL[boy.nakIdx],YONI_ANIMAL[girl.nakIdx]], argType:"yoni"},
+    {key:"Graha Maitri",max:5,val:grahaScore(boy.rashiIdx,girl.rashiIdx)},
     {key:"Gana",    max:6, val:ganaScore(boy.nakIdx,girl.nakIdx),
-     desc:"Temperament ("+GANA_NAMES[GANA[boy.nakIdx]]+" / "+GANA_NAMES[GANA[girl.nakIdx]]+")."},
-    {key:"Bhakoot", max:7, val:bhakootScore(boy.rashiIdx,girl.rashiIdx),
-     desc:"Love, family welfare and finances (rashi distance)."},
+     args:[GANA[boy.nakIdx],GANA[girl.nakIdx]], argType:"gana"},
+    {key:"Bhakoot", max:7, val:bhakootScore(boy.rashiIdx,girl.rashiIdx)},
     {key:"Nadi",    max:8, val:nadiScore(boy.nakIdx,girl.nakIdx),
-     desc:"Health, genes and progeny ("+NADI_NAMES[NADI[boy.nakIdx]]+" / "+NADI_NAMES[NADI[girl.nakIdx]]+")."}
+     args:[NADI[boy.nakIdx],NADI[girl.nakIdx]], argType:"nadi"}
   ];
   const total=koots.reduce((s,k)=>s+k.val,0);
   return {koots,total};
+}
+
+function kootName(k){ return T("k_"+k.key); }
+function kootDesc(k){
+  const d=T("d_"+k.key);
+  if(typeof d==="function"){
+    if(k.argType==="yoni")return d(tYoni(k.args[0]),tYoni(k.args[1]));
+    if(k.argType==="gana")return d(tGana(k.args[0]),tGana(k.args[1]));
+    if(k.argType==="nadi")return d(tNadi(k.args[0]),tNadi(k.args[1]));
+  }
+  return d;
 }
 
 /* =========================================================================
@@ -434,9 +623,9 @@ function parsePerson(suffix){
   const mo=parseInt(document.getElementById("dm"+suffix).value,10);
   const y=parseInt(document.getElementById("dy"+suffix).value,10);
   const time=document.getElementById("t"+suffix).value||"12:00";
-  if(!y||!mo||!d)throw new Error("Enter day, month and year of birth for both people.");
-  if(mo<1||mo>12)throw new Error("Month must be between 1 and 12.");
-  if(d<1||d>31)throw new Error("Day must be between 1 and 31.");
+  if(!y||!mo||!d)throw new Error(T("errDate"));
+  if(mo<1||mo>12)throw new Error(T("errMonth"));
+  if(d<1||d>31)throw new Error(T("errDay"));
   const[hh,mm]=time.split(":").map(Number);
   const tz=parseFloat(document.getElementById("z"+suffix).value)||0;
   const la=parseFloat(document.getElementById("la"+suffix).value)||0;
@@ -447,11 +636,11 @@ function parsePerson(suffix){
 }
 
 function verdict(t){
-  if(t>=28)return["A highly auspicious match","ok"];
-  if(t>=24)return["A very good match","ok"];
-  if(t>=18)return["An acceptable match","mid"];
-  if(t>=13)return["A weak match — needs review","no"];
-  return["Not recommended by Guna Milan","no"];
+  if(t>=28)return[T("v_excellent"),"ok"];
+  if(t>=24)return[T("v_verygood"),"ok"];
+  if(t>=18)return[T("v_ok"),"mid"];
+  if(t>=13)return[T("v_weak"),"no"];
+  return[T("v_no"),"no"];
 }
 
 function ring(total){
@@ -463,19 +652,19 @@ function ring(total){
       stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${off}"
       transform="rotate(-90 85 85)"/>
     <text x="85" y="80" text-anchor="middle" font-size="44" font-weight="800" fill="${col}" font-family="Georgia,serif">${total%1?total.toFixed(1):total}</text>
-    <text x="85" y="104" text-anchor="middle" font-size="14" fill="#6a5232" letter-spacing="2">/ 36 GUNA</text>
+    <text x="85" y="104" text-anchor="middle" font-size="14" fill="#6a5232" letter-spacing="2">/ 36</text>
   </svg>`;
 }
 
 function miniChart(p){
   return `<div class="mini">
     <h3>${p.name}</h3>
-    <div class="kv"><span>Rashi (Moon sign)</span><span>${p.rashi}</span></div>
-    <div class="kv"><span>Nakshatra</span><span>${p.nak} · pada ${p.pada}</span></div>
-    <div class="kv"><span>Gana</span><span>${GANA_NAMES[GANA[p.nakIdx]]}</span></div>
-    <div class="kv"><span>Nadi</span><span>${NADI_NAMES[NADI[p.nakIdx]]}</span></div>
-    <div class="kv"><span>Yoni</span><span>${YONI_NAMES[YONI_ANIMAL[p.nakIdx]]}</span></div>
-    <div class="kv"><span>Moon longitude (sidereal)</span><span>${p.sid.toFixed(2)}°</span></div>
+    <div class="kv"><span>${T("rashiLbl")}</span><span>${tRashi(p.rashiIdx)}</span></div>
+    <div class="kv"><span>${T("nakLbl")}</span><span>${tNak(p.nakIdx)} · ${T("pada")} ${p.pada}</span></div>
+    <div class="kv"><span>${T("ganaLbl")}</span><span>${tGana(GANA[p.nakIdx])}</span></div>
+    <div class="kv"><span>${T("nadiLbl")}</span><span>${tNadi(NADI[p.nakIdx])}</span></div>
+    <div class="kv"><span>${T("yoniLbl")}</span><span>${tYoni(YONI_ANIMAL[p.nakIdx])}</span></div>
+    <div class="kv"><span>${T("moonLbl")}</span><span>${p.sid.toFixed(2)}°</span></div>
   </div>`;
 }
 
@@ -484,14 +673,14 @@ function doshaFlags(boy,girl,res){
   const nadi=res.koots.find(k=>k.key==="Nadi");
   const bha=res.koots.find(k=>k.key==="Bhakoot");
   if(nadi.val===0){
-    out.push(`<div class="flag bad"><b>Nadi Dosha present.</b> Both share <b>${NADI_NAMES[NADI[boy.nakIdx]]} Nadi</b>, the most weighted koot. Traditionally flagged for health/progeny; classical texts allow cancellation (Nadi-dosha parihara) when both share the same Rashi but different Nakshatra, or same Nakshatra but different pada.</div>`);
+    out.push(`<div class="flag bad">${T("nadiBad")(tNadi(NADI[boy.nakIdx]))}</div>`);
   }else{
-    out.push(`<div class="flag ok"><b>No Nadi Dosha.</b> Different Nadis (${NADI_NAMES[NADI[boy.nakIdx]]} / ${NADI_NAMES[NADI[girl.nakIdx]]}) — full 8 points.</div>`);
+    out.push(`<div class="flag ok">${T("nadiOk")(tNadi(NADI[boy.nakIdx]),tNadi(NADI[girl.nakIdx]))}</div>`);
   }
   if(bha.val===0){
-    out.push(`<div class="flag bad"><b>Bhakoot Dosha present.</b> The Moon-sign distance falls in an inauspicious pair (2/12, 5/9 or 6/8). Cancellation is cited when the rashi lords are friends or identical.</div>`);
+    out.push(`<div class="flag bad">${T("bhaBad")}</div>`);
   }else{
-    out.push(`<div class="flag ok"><b>No Bhakoot Dosha.</b> Rashi distance is favourable.</div>`);
+    out.push(`<div class="flag ok">${T("bhaOk")}</div>`);
   }
   return `<div class="doshas">${out.join("")}</div>`;
 }
@@ -501,8 +690,8 @@ function render(boy,girl,res){
   const rows=res.koots.map(k=>{
     const pct=Math.round(k.val/k.max*100);
     return `<tr>
-      <td><b>${k.key}</b><div class="desc">${k.desc}</div></td>
-      <td style="min-width:120px"><div class="bar"><i style="width:${pct}%"></i></div></td>
+      <td><b>${kootName(k)}</b><div class="desc">${kootDesc(k)}</div></td>
+      <td class="barcell" style="min-width:120px"><div class="bar"><i style="width:${pct}%"></i></div></td>
       <td class="num">${k.val%1?k.val.toFixed(1):k.val} / ${k.max}</td>
     </tr>`;
   }).join("");
@@ -511,21 +700,21 @@ function render(boy,girl,res){
   <div class="score-hero">
     ${ring(res.total)}
     <div class="verdict ${cls}">${label}</div>
-    <div class="names">${boy.name} &nbsp;✦&nbsp; ${girl.name}</div>
+    <div class="names">${boy.name} &nbsp;${T("namesJoin")}&nbsp; ${girl.name}</div>
   </div>
 
   <div class="charts">${miniChart(boy)}${miniChart(girl)}</div>
 
   <table class="koot">
-    <caption>Ashtakoot breakdown</caption>
-    <thead><tr><th>Koot</th><th>Score</th><th class="num">Points</th></tr></thead>
+    <caption>${T("breakdown")}</caption>
+    <thead><tr><th>${T("kootHead")}</th><th class="barhead">${T("scoreHead")}</th><th class="num">${T("pointsHead")}</th></tr></thead>
     <tbody>${rows}</tbody>
-    <tfoot><tr><td>Total Guna Milan</td><td></td><td class="num">${res.total%1?res.total.toFixed(1):res.total} / 36</td></tr></tfoot>
+    <tfoot><tr><td>${T("total")}</td><td class="barcell"></td><td class="num">${res.total%1?res.total.toFixed(1):res.total} / 36</td></tr></tfoot>
   </table>
 
   ${doshaFlags(boy,girl,res)}
 
-  <p class="note">How to read this: 18+ is the conventional minimum for a recommended match, 24+ is very good, 28+ is excellent. Nadi (8) and Bhakoot (7) carry the most weight, which is why a high raw total can still warrant caution if either shows a dosha. This tool computes the Moon's sidereal position astronomically and applies the standard Ashtakoot tables; it does not invent results. For a binding decision, a practising astrologer also weighs the full birth chart, Mangal (Manglik) dosha, and dasha periods, which a two-field comparison cannot capture.</p>`;
+  <p class="note">${T("howto")}</p>`;
 }
 
 /* =========================================================================
@@ -536,8 +725,8 @@ async function findCity(suffix){
   const resBox=document.getElementById("plr"+suffix);
   const hint=document.getElementById("plh"+suffix);
   const btn=document.querySelector('.findbtn[data-s="'+suffix+'"]');
-  if(!q){hint.textContent="Type a city name first.";return;}
-  btn.disabled=true; btn.textContent="…"; hint.textContent="Searching…";
+  if(!q){hint.textContent=T("errCity");return;}
+  btn.disabled=true; btn.textContent="…"; hint.textContent=T("searching");
   resBox.classList.remove("show"); resBox.innerHTML="";
   try{
     const url="https://geocoding-api.open-meteo.com/v1/search?count=6&language=en&format=json&name="+encodeURIComponent(q);
@@ -545,7 +734,7 @@ async function findCity(suffix){
     if(!r.ok)throw new Error("lookup failed");
     const data=await r.json();
     const list=data.results||[];
-    if(!list.length){hint.textContent="No match found. Try just the city name, or add the country.";return;}
+    if(!list.length){hint.textContent=T("noMatch");return;}
     resBox.innerHTML=list.map((p,i)=>{
       const where=[p.admin1,p.country].filter(Boolean).join(", ");
       const off=tzOffsetHours(p.timezone);
@@ -564,15 +753,15 @@ async function findCity(suffix){
         document.getElementById("pl"+suffix).value=p.name+(p.admin1?", "+p.admin1:"")+(p.country?", "+p.country:"");
         resBox.querySelectorAll("button").forEach(x=>x.classList.remove("picked"));
         b.classList.add("picked");
-        hint.textContent="Set to "+p.name+(off!=null?" (UTC"+(off>=0?"+":"")+off+")":"")+". You can change the time zone if it used DST then.";
+        hint.textContent=T("setTo")(p.name,off);
         setTimeout(()=>resBox.classList.remove("show"),250);
       });
     });
-    hint.textContent="Pick the correct place from the list.";
+    hint.textContent=T("pickPlace");
   }catch(e){
-    hint.textContent="Couldn't reach the lookup service. Check your connection, or enter a nearby major city.";
+    hint.textContent=T("lookupFail");
   }finally{
-    btn.disabled=false; btn.textContent="Find";
+    btn.disabled=false; btn.textContent=T("find");
   }
 }
 /* Current UTC offset (hours) for an IANA timezone name. Note: this is the
@@ -598,23 +787,49 @@ document.querySelectorAll(".place input").forEach(inp=>{
   });
 });
 
+let LAST=null;
 document.getElementById("run").addEventListener("click",()=>{
   const err=document.getElementById("err"); err.textContent="";
   const out=document.getElementById("out");
   try{
     const boy=parsePerson("1"), girl=parsePerson("2");
     const res=compute(boy,girl);
+    LAST={boy,girl,res};
     out.innerHTML=render(boy,girl,res);
     out.classList.remove("hidden");
     out.scrollIntoView({behavior:"smooth",block:"start"});
   }catch(e){
-    err.textContent=e.message||"Please check the birth details.";
+    err.textContent=e.message||T("errDate");
     out.classList.add("hidden");
   }
 });
 
-document.getElementById("methodnote").textContent=
-"Method: each birth date/time/zone is converted to Universal Time, the Moon's tropical ecliptic longitude is found from an abridged ELP-2000 series (accurate to a few arc-minutes), then the Lahiri ayanāṁśa is subtracted to get the sidereal longitude. That longitude fixes the Rashi (30° each) and Nakshatra (13°20' each), which feed the eight traditional koots. Same inputs always produce the same chart.";
+/* ---- apply language to all static + dynamic text ---- */
+function applyLang(lang){
+  LANG=lang;
+  document.documentElement.lang = lang==="te"?"te":"en";
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const k=el.getAttribute("data-i18n");
+    const v=I18N[LANG][k];
+    if(typeof v==="string")el.textContent=v;
+  });
+  // placeholders (candidate card only)
+  const n2=document.getElementById("n2"); if(n2)n2.placeholder=T("namePH");
+  const pl2=document.getElementById("pl2"); if(pl2)pl2.placeholder=T("cityPH");
+  // method note
+  document.getElementById("methodnote").textContent=T("methodnote");
+  // toggle active button
+  document.querySelectorAll(".lang").forEach(b=>b.classList.toggle("active",b.dataset.lang===lang));
+  // re-render results if present
+  if(LAST){
+    document.getElementById("out").innerHTML=render(LAST.boy,LAST.girl,LAST.res);
+  }
+}
+document.querySelectorAll(".lang").forEach(b=>{
+  b.addEventListener("click",()=>applyLang(b.dataset.lang));
+});
+
+applyLang("en");
 </script>
 </body>
 </html>
